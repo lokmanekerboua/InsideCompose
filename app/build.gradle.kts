@@ -2,18 +2,24 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.dagger.hilt)
+    alias(libs.plugins.kotlinx.serialization)
 }
-
+val appCompileSdkVersion = rootProject.extra["AppCompileSdkVersion"] as Int
+val appJavaVersion = rootProject.extra["AppJavaVersion"] as JavaVersion
+val appMinSdkVersion = rootProject.extra["AppMinSdkVersion"] as Int
+val appTargetSdkVersion = rootProject.extra["AppTargetSdkVersion"] as Int
 android {
     namespace = "tech.lokmvne.insidecompose"
-    compileSdk = 36
+    compileSdk = appCompileSdkVersion
 
     defaultConfig {
         applicationId = "tech.lokmvne.insidecompose"
-        minSdk = 28
-        targetSdk = 36
+        minSdk = appMinSdkVersion
+        targetSdk = appTargetSdkVersion
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,14 +34,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = appJavaVersion
+        targetCompatibility = appJavaVersion
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = appJavaVersion.toString()
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -56,4 +63,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Google Fonts
+    implementation(libs.androidx.ui.text.google.fonts)
+
+    //viewmodel
+    implementation(libs.androidx.viewmodel.compose)
+    implementation(libs.androidx.viewmodel.ktx)
+
+    //Dagger - Hilt
+    implementation(libs.google.dagger.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.google.dagger.hilt.android.compiler)
+    ksp(libs.androidx.dagger.hilt.compiler)
+
+    //Navigation Compose
+    implementation(libs.navigation.compose)
+
+    //KotlinX Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
