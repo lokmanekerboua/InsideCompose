@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "InsideCompose"
 include(":app")
- 
+include(":components")
+include(":common")
+include(":androidBasics")

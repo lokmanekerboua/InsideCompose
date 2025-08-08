@@ -1,27 +1,26 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.kotlinx.serialization)
 }
+
 val appCompileSdkVersion = rootProject.extra["AppCompileSdkVersion"] as Int
 val appJavaVersion = rootProject.extra["AppJavaVersion"] as JavaVersion
 val appMinSdkVersion = rootProject.extra["AppMinSdkVersion"] as Int
 val appTargetSdkVersion = rootProject.extra["AppTargetSdkVersion"] as Int
+
 android {
-    namespace = "tech.lokmvne.insidecompose"
+    namespace = "tech.lokmvne.components"
     compileSdk = appCompileSdkVersion
 
     defaultConfig {
-        applicationId = "tech.lokmvne.insidecompose"
         minSdk = appMinSdkVersion
-        targetSdk = appTargetSdkVersion
-        versionCode = 1
-        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -40,18 +39,12 @@ android {
     kotlinOptions {
         jvmTarget = appJavaVersion.toString()
     }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
 }
 
 dependencies {
-
-    implementation(project(":components"))
-    implementation(project(":androidBasics"))
     implementation(project(":common"))
 
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -68,8 +61,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //Google Fonts
-    implementation(libs.androidx.ui.text.google.fonts)
 
     //viewmodel
     implementation(libs.androidx.viewmodel.compose)
@@ -86,7 +77,4 @@ dependencies {
 
     //KotlinX Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    //Coil
-    implementation(libs.io.coil)
 }
