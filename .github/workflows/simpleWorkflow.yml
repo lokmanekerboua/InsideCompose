@@ -97,38 +97,15 @@ jobs:
         path: app/build/outputs/bundle/release/app-release.aab
         
     - name: Create Release
-      uses: actions/create-release@v1
+      id: create_release
+      uses: softprops/action-gh-release@v2
       with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: Release ${{ steps.version.outputs.version }}
         files: |
           app/build/outputs/apk/release/MyApp-${{ steps.version.outputs.version }}.apk
           app/build/outputs/bundle/release/app-release.aab
-        name: Release ${{ steps.version.outputs.version }}
-        tag_name: ${{ steps.version.outputs.version }}
-        body: |
-          ## Release ${{ steps.version.outputs.version }}
-          
-          ### Changes
-          - Add your release notes here
-          
-          ### Downloads
-          - **APK**: For direct installation on Android devices
-          - **AAB**: For Google Play Store distribution
-          
-          Built with:
-          - Kotlin 2.1.21
-          - Gradle 8.12.0
-          - JVM 21
-          - Jetpack Compose
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload APK to Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: app/build/outputs/apk/release/MyApp-${{ steps.version.outputs.version }}.apk
-        asset_name: MyApp-${{ steps.version.outputs.version }}.apk
-        asset_content_type: application/vnd.android.package-archive
